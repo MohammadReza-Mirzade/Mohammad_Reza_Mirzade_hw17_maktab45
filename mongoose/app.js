@@ -4,9 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
-
 const api = require('./routes/api');
-
 const app = express();
 
 mongoose.connect(
@@ -30,7 +28,8 @@ app.use('/', api);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+    res.status(404);
+    return res.render('404');
 });
 
 // error handler

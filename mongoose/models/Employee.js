@@ -1,24 +1,34 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const stringAssumption = {
+    type: String,
+    required: true,
+    trim: true,
+    lowercase: true,
+}
+
 const EmployeeSchema = new Schema({
     lastName: {
-        type: String,
-        required: true,
-        trim: true,
+        ...stringAssumption,
         minlength: 2,
-        maxlength: 255,
+        maxlength: 255
     },
     firstName:{
-        type: String,
-        required: true,
-        trim: true,
+        ...stringAssumption,
         minlength: 2,
         maxlength: 255,
     },
     nationalNumber:{
-        required: true,
-        type: String
+        ...stringAssumption,
+        unique: true,
+        validate(value) {
+            if (value.match(/\d/g).length !== value.length){
+                throw new Error('');
+            } else if (value.length !== 10) {
+                throw new Error('');
+            }
+        } ,
     },
     beManager:{
         type: Boolean,
@@ -34,6 +44,7 @@ const EmployeeSchema = new Schema({
     },
     company: {
         type: Schema.Types.ObjectId,
+        trim: true,
         ref: "Company",
         required: true  
     },
